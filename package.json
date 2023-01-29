@@ -2,7 +2,7 @@
   "name": "tradier",
   "version": "1.0.0",
   "description": "SDK for Tradier API",
-  "main": "index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "build": "tsc -p .",
     "start": "tsc -p . && env-cmd node dist/src/index.js",
@@ -26,6 +26,7 @@
     "axios": "^0.27.2",
     "env-cmd": "^10.1.0",
     "jest": "^28.1.0",
+    "request": "^2.88.2",
     "ts-jest": "^28.0.2",
     "typescript": "^4.6.4"
   },

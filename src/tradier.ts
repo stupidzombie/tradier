@@ -1,6 +1,7 @@
 import { AxiosInstance } from "axios";
 import { TradierVersion } from "types";
 import { MarketDataRequests } from "./core/market-data";
+import { Orders } from "./core/orders";
 import { createTradierApi } from "./utils/request";
 
 export const URLS = {
@@ -13,13 +14,15 @@ export const URLS = {
 export class Tradier {
     accessToken: string;
     version: TradierVersion;
-    api: AxiosInstance;
+    tradier: { api: AxiosInstance, accountId: string };
     marketData: MarketDataRequests;
+    orders: Orders
+    accountId: string
 
-    constructor(accessToken: string, version?: TradierVersion) {
+    constructor(accessToken: string, accountId: string, version?: TradierVersion) {
         this.accessToken = accessToken;
         this.version = version;
-        this.api = createTradierApi(URLS[this.version], this.accessToken);
+        this.tradier = createTradierApi(URLS[this.version], this.accessToken, accountId);
 
         /**
          * @NOTE
@@ -30,6 +33,7 @@ export class Tradier {
          * example the getOptionsChain call is in Tradier.options.getChain
          */
 
-        this.marketData = new MarketDataRequests(this.api);
+        this.marketData = new MarketDataRequests(this.tradier.api, this.tradier.accountId);
+        this.orders = new Orders(this.tradier.api, this.tradier.accountId);
     }
 }

@@ -13,8 +13,8 @@ import {
 import { BaseRequests } from "./requests";
 
 export class MarketDataRequests extends BaseRequests {
-    constructor(api: AxiosInstance) {
-        super(api);
+    constructor(api: AxiosInstance, accountId: string) {
+        super(api, accountId);
     }
 
     /**
@@ -84,13 +84,18 @@ export class MarketDataRequests extends BaseRequests {
         includeAllRoots?: A,
         strikes?: boolean
     ): Promise<OptionsExpirationResponse> {
-        const data = await this.api.get("/markets/options/expirations", {
-            params: { symbol, includeAllRoots, strikes },
-        });
-
-        return includeAllRoots || strikes
-            ? data.data.expirations.expiration
-            : data.data.expirations.date;
+        try {
+            const data = await this.api.get("/markets/options/expirations", {
+                params: { symbol, includeAllRoots, strikes },
+            });
+    
+            return includeAllRoots || strikes
+                ? data.data.expirations.expiration
+                : data.data.expirations.date;
+        } catch (error: any) {
+            console.log(error)
+        }
+       
     }
 
     /**
