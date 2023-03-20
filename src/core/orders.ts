@@ -53,12 +53,17 @@ export class Orders extends BaseRequests {
 
     public async getOrderDetails() {
         const data = await this.api.get("/accounts/" + this.accountId + "/orders")
-        console.log(data.data.orders.order)
+        // console.log(data.data.orders.order)
         return data.data.orders.order
     }
 
     public async cancelOrder(orderID: string) {
         const cancelOrder = await this.api.delete("/accounts/" + this.accountId + "/orders/" + orderID)
         console.log("Order Cancelled!")
+    }
+
+    public async getAccountPositions() {
+        const positionsData = await this.api.get("/accounts/" + this.accountId + "/positions")
+        return positionsData.data.positions.position
     }
 }
