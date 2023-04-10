@@ -158,7 +158,7 @@ export class MarketDataRequests extends BaseRequests {
                     }
                 }
         })
-        console.log(filteredListForCompanyEvents)
+        //console.log(filteredListForCompanyEvents)
         return filteredListForCompanyEvents
     }
 

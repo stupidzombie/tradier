@@ -122,7 +122,7 @@ class MarketDataRequests extends requests_1.BaseRequests {
                 }
             }
         });
-        console.log(filteredListForCompanyEvents);
+        //console.log(filteredListForCompanyEvents)
         return filteredListForCompanyEvents;
     }
     /**
