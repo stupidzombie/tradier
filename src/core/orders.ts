@@ -51,6 +51,29 @@ export class Orders extends BaseRequests {
         // return data.data.quotes.quote;
     }
 
+    async placeSingleLegOptionOrder(stockSymbol, optionSymbol, price, side, quantity) {
+        try {
+            const params = {
+                price: price,
+                class: "option",
+                symbol: stockSymbol,
+                side: side,
+                duration: "day",
+                quantity: quantity,
+                type: "limit",
+                option_symbol: optionSymbol
+            }
+            const data = await this.api.post("/accounts/" + this.accountId + "/orders", qs.stringify(params), {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            //console.log(data.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     public async getOrderDetails() {
         const data = await this.api.get("/accounts/" + this.accountId + "/orders")
         // console.log(data.data.orders.order)
