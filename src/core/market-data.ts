@@ -134,7 +134,7 @@ export class MarketDataRequests extends BaseRequests {
         return data.data.history;
     }
 
-    public async getEarningsWeek(symbol: string) {
+    public async getEarningsWeek(symbol: string, thisWeekOrNextWeek) {
         const getEarningsWeek = await this.api.get("/markets/fundamentals/calendars", {
             params: { symbols: symbol }
         })
@@ -151,11 +151,19 @@ export class MarketDataRequests extends BaseRequests {
                     // calculate the start and end of the current week
                     const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
                     const endOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (6 - now.getDay()));
+                    const startOfNextWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() + 7);
+                    const endOfNextWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (13 - now.getDay()));
 
                     // check if myDate is within the current week
-                    if (myDate >= startOfWeek && myDate <= endOfWeek) {
+                    //thisweekornextweek == 0 (0 means this week, 1 would be next week)
+                    if (myDate >= startOfWeek && myDate <= endOfWeek && thisWeekOrNextWeek == 0) {
                         return true
                     }
+
+                    if (myDate >= startOfNextWeek && myDate <= endOfNextWeek && thisWeekOrNextWeek == 1) {
+                        return true
+                    }
+                    
                 }
         })
         //console.log(filteredListForCompanyEvents)
