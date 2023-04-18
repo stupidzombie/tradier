@@ -71,7 +71,6 @@ class Orders extends requests_1.BaseRequests {
     }
     async getOrderDetails() {
         const data = await this.api.get("/accounts/" + this.accountId + "/orders");
-        // console.log(data.data.orders.order)
         return data.data.orders.order;
     }
     async cancelOrder(orderID) {

@@ -76,7 +76,6 @@ export class Orders extends BaseRequests {
 
     public async getOrderDetails() {
         const data = await this.api.get("/accounts/" + this.accountId + "/orders")
-        // console.log(data.data.orders.order)
         return data.data.orders.order
     }
 
