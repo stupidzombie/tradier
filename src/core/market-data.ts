@@ -112,6 +112,10 @@ export class MarketDataRequests extends BaseRequests {
         return data.data.symbols[0].options;
     }
 
+    public async getAccountCash() {
+        const cash = await this.api.get("https://api.tradier.com/v1/accounts/" + this.accountId + "/balances")
+        return cash.data.balances.total_cash
+    }
     /**
      * @description
      * Get historical pricing for a security. This data will usually cover the entire lifetime of
