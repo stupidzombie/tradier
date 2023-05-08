@@ -90,6 +90,10 @@ class MarketDataRequests extends requests_1.BaseRequests {
         const cash = await this.api.get("https://api.tradier.com/v1/accounts/" + this.accountId + "/balances");
         return cash.data.balances.total_cash;
     }
+    async getWatchlist() {
+        const watchlist = await this.api.get("https://api.tradier.com/v1/watchlists/default");
+        return watchlist.data.watchlist.items.item;
+    }
     /**
      * @description
      * Get historical pricing for a security. This data will usually cover the entire lifetime of
