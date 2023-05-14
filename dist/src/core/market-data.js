@@ -86,10 +86,6 @@ class MarketDataRequests extends requests_1.BaseRequests {
         const data = await this.api.get("/markets/options/lookup", { params: { underlying } });
         return data.data.symbols[0].options;
     }
-    async getAccountCash() {
-        const cash = await this.api.get("https://api.tradier.com/v1/accounts/" + this.accountId + "/balances");
-        return cash.data.balances.total_cash;
-    }
     async getWatchlist() {
         const watchlist = await this.api.get("https://api.tradier.com/v1/watchlists/default");
         return watchlist.data.watchlist.items.item;

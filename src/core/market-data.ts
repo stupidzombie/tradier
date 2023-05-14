@@ -112,11 +112,6 @@ export class MarketDataRequests extends BaseRequests {
         return data.data.symbols[0].options;
     }
 
-    public async getAccountCash() {
-        const cash = await this.api.get("https://api.tradier.com/v1/accounts/" + this.accountId + "/balances")
-        return cash.data.balances.total_cash
-    }
-
     public async getWatchlist() {
         const watchlist = await this.api.get("https://api.tradier.com/v1/watchlists/default")
         return watchlist.data.watchlist.items.item

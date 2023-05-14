@@ -73,6 +73,10 @@ class Orders extends requests_1.BaseRequests {
         const data = await this.api.get("/accounts/" + this.accountId + "/orders");
         return data.data.orders.order;
     }
+    async getAccountBalances() {
+        const cash = await this.api.get("https://api.tradier.com/v1/accounts/" + this.accountId + "/balances");
+        return cash.data.balances;
+    }
     async cancelOrder(orderID) {
         const cancelOrder = await this.api.delete("/accounts/" + this.accountId + "/orders/" + orderID);
         console.log("Order Cancelled!");
