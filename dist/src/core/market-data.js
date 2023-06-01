@@ -87,7 +87,9 @@ class MarketDataRequests extends requests_1.BaseRequests {
         return data.data.symbols[0].options;
     }
     async getWatchlist() {
-        const watchlist = await this.api.get("https://api.tradier.com/v1/watchlists/default");
+        console.log("awlkj");
+        const watchlist = await this.api.get("/watchlists/default");
+        console.log(watchlist.data.watchlist.items.item);
         return watchlist.data.watchlist.items.item;
     }
     /**

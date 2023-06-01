@@ -113,7 +113,9 @@ export class MarketDataRequests extends BaseRequests {
     }
 
     public async getWatchlist() {
-        const watchlist = await this.api.get("https://api.tradier.com/v1/watchlists/default")
+        console.log("awlkj")
+        const watchlist = await this.api.get("/watchlists/default")
+        console.log(watchlist.data.watchlist.items.item)
         return watchlist.data.watchlist.items.item
     }
     /**

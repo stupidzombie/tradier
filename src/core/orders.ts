@@ -80,7 +80,7 @@ export class Orders extends BaseRequests {
     }
 
     public async getAccountBalances() {
-        const cash = await this.api.get("https://api.tradier.com/v1/accounts/" + this.accountId + "/balances")
+        const cash = await this.api.get("/accounts/" + this.accountId + "/balances")
         return cash.data.balances
     }
 
