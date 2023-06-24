@@ -90,8 +90,12 @@ class MarketDataRequests {
     async getWatchlist() {
         console.log("awlkj");
         const watchlist = await this.api.get("/watchlists/default");
-        console.log(watchlist.data.watchlist.items.item);
-        return watchlist.data.watchlist.items.item;
+        let actualWatchlist = watchlist.data.watchlist.items.item;
+        if (actualWatchlist && !Array.isArray(actualWatchlist)) {
+            actualWatchlist = [actualWatchlist];
+        }
+        console.log(actualWatchlist);
+        return actualWatchlist;
     }
     /**
      * @description
