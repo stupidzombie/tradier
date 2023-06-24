@@ -11,10 +11,15 @@ import {
     StrikeResponse,
 } from "types";
 import { BaseRequests } from "./requests";
+import Tradier from "..";
 
-export class MarketDataRequests extends BaseRequests {
-    constructor(api: AxiosInstance, accountId: string) {
-        super(api, accountId);
+export class MarketDataRequests {
+    api: AxiosInstance
+    betaApi: AxiosInstance
+    constructor(tradier: any, accountId: string) {
+        //super(tradier.api, accountId);
+        this.api = tradier.api
+        this.betaApi = tradier.betaApi
     }
 
     /**
@@ -141,7 +146,7 @@ export class MarketDataRequests extends BaseRequests {
     }
 
     public async getEarningsWeek(symbol: string, thisWeekOrNextWeek) {
-        const getEarningsWeek = await this.api.get("/markets/fundamentals/calendars", {
+        const getEarningsWeek = await this.betaApi.get("/markets/fundamentals/calendars", {
             params: { symbols: symbol }
         })
         //console.log(getEarningsWeek.data[0].results)
@@ -149,28 +154,28 @@ export class MarketDataRequests extends BaseRequests {
         let eventTypeEarningsList = [7, 8, 9, 10]
         let filteredListForCompanyEvents = filteredList[0].tables.corporate_calendars.filter((listitemy) => {
             if (eventTypeEarningsList.includes(listitemy.event_type)) {
-                    const now = new Date();
+                const now = new Date();
 
-                    // create a Date object for the date you want to check
-                    const myDate = new Date(listitemy.begin_date_time); // replace with your desired date
+                // create a Date object for the date you want to check
+                const myDate = new Date(listitemy.begin_date_time); // replace with your desired date
 
-                    // calculate the start and end of the current week
-                    const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
-                    const endOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (6 - now.getDay()));
-                    const startOfNextWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() + 7);
-                    const endOfNextWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (13 - now.getDay()));
+                // calculate the start and end of the current week
+                const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+                const endOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (6 - now.getDay()));
+                const startOfNextWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() + 7);
+                const endOfNextWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (13 - now.getDay()));
 
-                    // check if myDate is within the current week
-                    //thisweekornextweek == 0 (0 means this week, 1 would be next week)
-                    if (myDate >= startOfWeek && myDate <= endOfWeek && thisWeekOrNextWeek == 0) {
-                        return true
-                    }
-
-                    if (myDate >= startOfNextWeek && myDate <= endOfNextWeek && thisWeekOrNextWeek == 1) {
-                        return true
-                    }
-                    
+                // check if myDate is within the current week
+                //thisweekornextweek == 0 (0 means this week, 1 would be next week)
+                if (myDate >= startOfWeek && myDate <= endOfWeek && thisWeekOrNextWeek == 0) {
+                    return true
                 }
+
+                if (myDate >= startOfNextWeek && myDate <= endOfNextWeek && thisWeekOrNextWeek == 1) {
+                    return true
+                }
+
+            }
         })
         //console.log(filteredListForCompanyEvents)
         return filteredListForCompanyEvents

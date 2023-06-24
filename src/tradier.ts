@@ -14,7 +14,7 @@ export const URLS = {
 export class Tradier {
     accessToken: string;
     version: TradierVersion;
-    tradier: { api: AxiosInstance, accountId: string };
+    tradier: { api: AxiosInstance, betaApi: AxiosInstance, accountId: string };
     marketData: MarketDataRequests;
     orders: Orders
     accountId: string
@@ -22,7 +22,7 @@ export class Tradier {
     constructor(accessToken: string, accountId: string, version?: TradierVersion) {
         this.accessToken = accessToken;
         this.version = version;
-        this.tradier = createTradierApi(URLS[this.version], this.accessToken, accountId);
+        this.tradier = createTradierApi(URLS[this.version], URLS['beta'], this.accessToken, accountId);
 
         /**
          * @NOTE
@@ -33,7 +33,7 @@ export class Tradier {
          * example the getOptionsChain call is in Tradier.options.getChain
          */
 
-        this.marketData = new MarketDataRequests(this.tradier.api, this.tradier.accountId);
+        this.marketData = new MarketDataRequests(this.tradier, this.tradier.accountId);
         this.orders = new Orders(this.tradier.api, this.tradier.accountId);
     }
 }

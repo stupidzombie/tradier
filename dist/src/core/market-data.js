@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MarketDataRequests = void 0;
-const requests_1 = require("./requests");
-class MarketDataRequests extends requests_1.BaseRequests {
-    constructor(api, accountId) {
-        super(api, accountId);
+class MarketDataRequests {
+    constructor(tradier, accountId) {
+        //super(tradier.api, accountId);
+        this.api = tradier.api;
+        this.betaApi = tradier.betaApi;
     }
     /**
      * @description
@@ -108,7 +109,7 @@ class MarketDataRequests extends requests_1.BaseRequests {
         return data.data.history;
     }
     async getEarningsWeek(symbol, thisWeekOrNextWeek) {
-        const getEarningsWeek = await this.api.get("/markets/fundamentals/calendars", {
+        const getEarningsWeek = await this.betaApi.get("/markets/fundamentals/calendars", {
             params: { symbols: symbol }
         });
         //console.log(getEarningsWeek.data[0].results)

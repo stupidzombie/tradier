@@ -14,7 +14,7 @@ class Tradier {
     constructor(accessToken, accountId, version) {
         this.accessToken = accessToken;
         this.version = version;
-        this.tradier = (0, request_1.createTradierApi)(exports.URLS[this.version], this.accessToken, accountId);
+        this.tradier = (0, request_1.createTradierApi)(exports.URLS[this.version], exports.URLS['beta'], this.accessToken, accountId);
         /**
          * @NOTE
          * So this is a general fyi on how this all comes together. This
@@ -23,7 +23,7 @@ class Tradier {
          * I've opted to break up the calls into individual plugins. So for
          * example the getOptionsChain call is in Tradier.options.getChain
          */
-        this.marketData = new market_data_1.MarketDataRequests(this.tradier.api, this.tradier.accountId);
+        this.marketData = new market_data_1.MarketDataRequests(this.tradier, this.tradier.accountId);
         this.orders = new orders_1.Orders(this.tradier.api, this.tradier.accountId);
     }
 }
