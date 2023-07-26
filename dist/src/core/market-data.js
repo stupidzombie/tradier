@@ -113,9 +113,15 @@ class MarketDataRequests {
         return data.data.history;
     }
     async getEarningsWeek(symbol, thisWeekOrNextWeek) {
-        const getEarningsWeek = await this.betaApi.get("/markets/fundamentals/calendars", {
+        let getEarningsWeek
+        try {
+         getEarningsWeek = await this.betaApi.get("/markets/fundamentals/calendars", {
             params: { symbols: symbol }
         });
+    } catch (error) {
+        // we are likely in the sandbox
+       getEarningsWeek=[]
+    }
         //console.log(getEarningsWeek.data[0].results)
         let filteredList = getEarningsWeek.data[0].results.filter((listItem) => { return listItem.tables.corporate_calendars != null; });
         let eventTypeEarningsList = [7, 8, 9, 10];
