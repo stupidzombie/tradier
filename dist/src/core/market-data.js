@@ -87,15 +87,36 @@ class MarketDataRequests {
         const data = await this.api.get("/markets/options/lookup", { params: { underlying } });
         return data.data.symbols[0].options;
     }
-    async getWatchlist() {
-        console.log("awlkj");
-        const watchlist = await this.api.get("/watchlists/default");
-        let actualWatchlist = watchlist.data.watchlist.items.item;
-        if (actualWatchlist && !Array.isArray(actualWatchlist)) {
-            actualWatchlist = [actualWatchlist];
+
+    /**
+     * @description
+     * Gets a list of watchlists
+     */
+    async getWatchlists() {
+        const watchlists = await this.api.get("/watchlists");
+        return watchlists?.data?.watchlists;
+    }
+
+    /**
+     * @description
+     * Get specified watchlist or default if none specified
+     * @param {string} name 
+     * @returns 
+     */
+    async getWatchlist(name) {
+        name = name || 'default'
+        try {
+            const watchlist = await this.api.get(`/watchlists/${name}`);
+            let actualWatchlist = watchlist.data.watchlist.items.item;
+            if (actualWatchlist && !Array.isArray(actualWatchlist)) {
+                actualWatchlist = [actualWatchlist];
+            }
+            console.log(actualWatchlist);
+            return actualWatchlist;
+        } catch {
+            return []
         }
-        console.log(actualWatchlist);
-        return actualWatchlist;
+
     }
     /**
      * @description
@@ -113,15 +134,16 @@ class MarketDataRequests {
         return data.data.history;
     }
     async getEarningsWeek(symbol, thisWeekOrNextWeek) {
-        let getEarningsWeek
+        let getEarningsWeek;
         try {
-         getEarningsWeek = await this.betaApi.get("/markets/fundamentals/calendars", {
-            params: { symbols: symbol }
-        });
-    } catch (error) {
-        // we are likely in the sandbox
-       getEarningsWeek=[]
-    }
+            getEarningsWeek = await this.betaApi.get("/markets/fundamentals/calendars", {
+                params: { symbols: symbol }
+            });
+        }
+        catch (error) {
+            // we are likely in the sandbox
+            getEarningsWeek = [];
+        }
         //console.log(getEarningsWeek.data[0].results)
         let filteredList = getEarningsWeek.data[0].results.filter((listItem) => { return listItem.tables.corporate_calendars != null; });
         let eventTypeEarningsList = [7, 8, 9, 10];
