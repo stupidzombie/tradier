@@ -117,16 +117,32 @@ export class MarketDataRequests {
         return data.data.symbols[0].options;
     }
 
+    /**
+     * @description
+     * Gets a list of watchlists
+     */
+    async getWatchlists() {
+        const watchlists = await this.api.get("/watchlists");
+        return watchlists?.data?.watchlists;
+    }
+
+    /**
+     * @description
+     * Get specified watchlist or default if none specified
+     * @param {string} name 
+     * @returns 
+     */
     public async getWatchlist() {
         console.log("awlkj")
         const watchlist = await this.api.get("/watchlists/default")
         let actualWatchlist = watchlist.data.watchlist.items.item
-        if(actualWatchlist && !Array.isArray(actualWatchlist)) {
+        if (actualWatchlist && !Array.isArray(actualWatchlist)) {
             actualWatchlist = [actualWatchlist]
         }
         console.log(actualWatchlist)
         return actualWatchlist
     }
+
     /**
      * @description
      * Get historical pricing for a security. This data will usually cover the entire lifetime of
@@ -149,16 +165,37 @@ export class MarketDataRequests {
         return data.data.history;
     }
 
-    public async getEarningsWeek(symbol: string, thisWeekOrNextWeek) {
-       let getEarningsWeek
+    public async getEvents(symbol: string) {
+        let eventList
         try {
-         getEarningsWeek = await this.betaApi.get("/markets/fundamentals/calendars", {
-            params: { symbols: symbol }
-        });
-    } catch (error) {
-        // we are likely in the sandbox
-       getEarningsWeek=[]
+            eventList = await this.betaApi.get("/markets/fundamentals/calendars", {
+                params: { symbols: symbol }
+            });
+            let filteredList = eventList.data[0].results.filter((listItem) => { return listItem.tables.corporate_calendars != null })
+            return filteredList[0].tables.corporate_calendars
+        } catch (error) {
+            // we are likely in the sandbox
+            return []
+        }
     }
+
+    /**
+     * @description
+     * Gets whether the specified week has earnings
+     * @param symbol 
+     * @param thisWeekOrNextWeek 0 for this week, 1 for next week
+     * @returns 
+     */
+    public async getEarningsWeek(symbol: string, thisWeekOrNextWeek) {
+        let getEarningsWeek
+        try {
+            getEarningsWeek = await this.betaApi.get("/markets/fundamentals/calendars", {
+                params: { symbols: symbol }
+            });
+        } catch (error) {
+            // we are likely in the sandbox
+            getEarningsWeek = []
+        }
         //console.log(getEarningsWeek.data[0].results)
         let filteredList = getEarningsWeek.data[0].results.filter((listItem) => { return listItem.tables.corporate_calendars != null })
         let eventTypeEarningsList = [7, 8, 9, 10]

@@ -87,36 +87,30 @@ class MarketDataRequests {
         const data = await this.api.get("/markets/options/lookup", { params: { underlying } });
         return data.data.symbols[0].options;
     }
-
     /**
      * @description
      * Gets a list of watchlists
      */
     async getWatchlists() {
+        var _a;
         const watchlists = await this.api.get("/watchlists");
-        return watchlists?.data?.watchlists;
+        return (_a = watchlists === null || watchlists === void 0 ? void 0 : watchlists.data) === null || _a === void 0 ? void 0 : _a.watchlists;
     }
-
     /**
      * @description
      * Get specified watchlist or default if none specified
-     * @param {string} name 
-     * @returns 
+     * @param {string} name
+     * @returns
      */
-    async getWatchlist(name) {
-        name = name || 'default'
-        try {
-            const watchlist = await this.api.get(`/watchlists/${name}`);
-            let actualWatchlist = watchlist.data.watchlist.items.item;
-            if (actualWatchlist && !Array.isArray(actualWatchlist)) {
-                actualWatchlist = [actualWatchlist];
-            }
-            console.log(actualWatchlist);
-            return actualWatchlist;
-        } catch {
-            return []
+    async getWatchlist() {
+        console.log("awlkj");
+        const watchlist = await this.api.get("/watchlists/default");
+        let actualWatchlist = watchlist.data.watchlist.items.item;
+        if (actualWatchlist && !Array.isArray(actualWatchlist)) {
+            actualWatchlist = [actualWatchlist];
         }
-
+        console.log(actualWatchlist);
+        return actualWatchlist;
     }
     /**
      * @description
@@ -133,6 +127,27 @@ class MarketDataRequests {
         });
         return data.data.history;
     }
+    async getEvents(symbol) {
+        let eventList;
+        try {
+            eventList = await this.betaApi.get("/markets/fundamentals/calendars", {
+                params: { symbols: symbol }
+            });
+            let filteredList = eventList.data[0].results.filter((listItem) => { return listItem.tables.corporate_calendars != null; });
+            return filteredList[0].tables.corporate_calendars;
+        }
+        catch (error) {
+            // we are likely in the sandbox
+            return [];
+        }
+    }
+    /**
+     * @description
+     * Gets whether the specified week has earnings
+     * @param symbol
+     * @param thisWeekOrNextWeek 0 for this week, 1 for next week
+     * @returns
+     */
     async getEarningsWeek(symbol, thisWeekOrNextWeek) {
         let getEarningsWeek;
         try {
