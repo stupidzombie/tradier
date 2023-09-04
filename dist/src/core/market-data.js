@@ -97,14 +97,21 @@ class MarketDataRequests {
         const watchlists = await this.api.get("/watchlists");
         return (_a = watchlists === null || watchlists === void 0 ? void 0 : watchlists.data) === null || _a === void 0 ? void 0 : _a.watchlists;
     }
+    /**
+     *
+     * @param {string} name
+     * @param {Array} symbols
+     * @returns
+     */
     async createWatchlist(name, symbols) {
         let params = { name, symbols: symbols.join(",") };
-        const createWatchlist = await this.api.post("/watchlists", params, {
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-        return createWatchlist;
+        try {
+            const createWatchlist = await this.api.post("/watchlists", qs.stringify(params));
+            return createWatchlist;
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
     /**
      * @description

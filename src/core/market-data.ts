@@ -127,14 +127,21 @@ export class MarketDataRequests {
         return watchlists?.data?.watchlists;
     }
 
+    /**
+     * 
+     * @param {string} name 
+     * @param {Array} symbols 
+     * @returns 
+     */
     async createWatchlist(name, symbols) {
-        let params = {name, symbols: symbols.join(",")}
-        const createWatchlist = await this.api.post("/watchlists", params, {
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-        return createWatchlist
+        let params = { name, symbols: symbols.join(",") }
+        try {
+            const createWatchlist = await this.api.post("/watchlists", qs.stringify(params));
+            return createWatchlist
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
     /**
