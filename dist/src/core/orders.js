@@ -63,7 +63,7 @@ class Orders extends requests_1.BaseRequests {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            //console.log(data.data)
+            return data.data;
         }
         catch (error) {
             console.log(error);
@@ -83,7 +83,16 @@ class Orders extends requests_1.BaseRequests {
     }
     async getAccountPositions() {
         const positionsData = await this.api.get("/accounts/" + this.accountId + "/positions");
-        return positionsData.data.positions.position;
+        const positions = positionsData.data.positions.position;
+        if (positions && !Array.isArray(positions)) {
+            return [positions];
+        }
+        else if (positions) {
+            return positions;
+        }
+        else {
+            return [];
+        }
     }
 }
 exports.Orders = Orders;

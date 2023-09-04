@@ -68,7 +68,7 @@ export class Orders extends BaseRequests {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            //console.log(data.data)
+            return data.data
         } catch (error) {
             console.log(error)
         }
@@ -91,6 +91,13 @@ export class Orders extends BaseRequests {
 
     public async getAccountPositions() {
         const positionsData = await this.api.get("/accounts/" + this.accountId + "/positions")
-        return positionsData.data.positions.position
+        const positions = positionsData.data.positions.position
+        if (positions && !Array.isArray(positions)) {
+            return [positions]
+        } else if(positions) {
+            return positions
+        } else {
+            return []
+        }
     }
 }
