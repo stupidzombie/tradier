@@ -129,7 +129,7 @@ export class MarketDataRequests {
 
     async createWatchlist(name, symbols) {
         let params = {name, symbols: symbols.join(",")}
-        const createWatchlist = await this.api.post("/watchlists", qs.stringify(params), {
+        const createWatchlist = await this.api.post("/watchlists", params, {
             headers: {
                 'Content-Type': 'applicaiton/json'
             }
