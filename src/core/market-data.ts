@@ -12,6 +12,7 @@ import {
 } from "types";
 import { BaseRequests } from "./requests";
 import Tradier from "..";
+const qs = require('qs');
 
 export class MarketDataRequests {
     api: AxiosInstance
@@ -124,6 +125,16 @@ export class MarketDataRequests {
     async getWatchlists() {
         const watchlists = await this.api.get("/watchlists");
         return watchlists?.data?.watchlists;
+    }
+
+    async createWatchlist(name, symbols) {
+        let params = {name, symbols: symbols.join(",")}
+        const createWatchlist = await this.api.post("/watchlists", qs.stringify(params), {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return createWatchlist
     }
 
     /**

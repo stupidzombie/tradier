@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MarketDataRequests = void 0;
+const qs = require('qs');
 class MarketDataRequests {
     constructor(tradier, accountId) {
         //super(tradier.api, accountId);
@@ -95,6 +96,15 @@ class MarketDataRequests {
         var _a;
         const watchlists = await this.api.get("/watchlists");
         return (_a = watchlists === null || watchlists === void 0 ? void 0 : watchlists.data) === null || _a === void 0 ? void 0 : _a.watchlists;
+    }
+    async createWatchlist(name, symbols) {
+        let params = { name, symbols: symbols.join(",") };
+        const createWatchlist = await this.api.post("/watchlists", qs.stringify(params), {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return createWatchlist;
     }
     /**
      * @description
