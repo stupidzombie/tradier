@@ -101,7 +101,7 @@ class MarketDataRequests {
         let params = { name, symbols: symbols.join(",") };
         const createWatchlist = await this.api.post("/watchlists", qs.stringify(params), {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'applicaiton/json'
             }
         });
         return createWatchlist;
