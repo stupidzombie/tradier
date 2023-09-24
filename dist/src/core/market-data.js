@@ -128,6 +128,11 @@ class MarketDataRequests {
         console.log(actualWatchlist);
         return actualWatchlist;
     }
+    async getMarketOpen() {
+        const isMarketOpen = await this.api.get("/markets/clock");
+        // console.log(isMarketOpen)
+        return isMarketOpen;
+    }
     /**
      * @description
      * Get historical pricing for a security. This data will usually cover the entire lifetime of
