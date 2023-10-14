@@ -115,11 +115,30 @@ class MarketDataRequests {
     }
     /**
      * @description
+     * Update specified watchlist
+     * @param {string} name
+     * @param {Array} symbols
+     * @returns
+     */
+    async updateWatchlist(name, symbols) {
+        let params = { name, symbols: symbols.join(",") };
+        try {
+            const createWatchlist = await this.api.put(`/watchlists/${name}`, qs.stringify(params));
+            return createWatchlist;
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    /**
+     * @description
      * Get specified watchlist or default if none specified
      * @param {string} name
      * @returns
      */
     async getWatchlist(name) {
+        if (!name)
+            name = 'default';
         const watchlist = await this.api.get(`/watchlists/${name}`);
         let actualWatchlist = watchlist.data.watchlist.items.item;
         if (actualWatchlist && !Array.isArray(actualWatchlist)) {
