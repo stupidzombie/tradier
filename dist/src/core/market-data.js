@@ -140,6 +140,9 @@ class MarketDataRequests {
         if (!name)
             name = 'default';
         const watchlist = await this.api.get(`/watchlists/${name}`);
+        if (watchlist.data.watchlist.items === 'null') {
+            return [];
+        }
         let actualWatchlist = watchlist.data.watchlist.items.item;
         if (actualWatchlist && !Array.isArray(actualWatchlist)) {
             actualWatchlist = [actualWatchlist];
