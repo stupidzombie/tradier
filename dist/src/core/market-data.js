@@ -123,8 +123,11 @@ class MarketDataRequests {
     async updateWatchlist(name, symbols) {
         let params = { name, symbols: symbols.join(",") };
         try {
-            const createWatchlist = await this.api.put(`/watchlists/${name}`, qs.stringify(params));
-            return createWatchlist;
+            const updateWatchlist = await this.api.put(`/watchlists/${name}`, qs.stringify(params));
+            if (updateWatchlist && !Array.isArray(updateWatchlist)) {
+                return [updateWatchlist];
+            }
+            return updateWatchlist;
         }
         catch (error) {
             console.log(error);
