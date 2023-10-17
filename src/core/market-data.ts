@@ -153,11 +153,18 @@ export class MarketDataRequests {
     async updateWatchlist(name, symbols) {
         let params = { name, symbols: symbols.join(",") }
         try {
-            const updateWatchlist = await this.api.put(`/watchlists/${name}`, qs.stringify(params));
-            if (updateWatchlist && !Array.isArray(updateWatchlist)) {
-                return [updateWatchlist]
+            const watchlist = await this.api.put(`/watchlists/${name}`, qs.stringify(params));
+            if (watchlist.data.watchlist.items === 'null') {
+                return []
             }
-            return updateWatchlist
+
+            let actualWatchlist = watchlist.data.watchlist.items.item
+
+            if (actualWatchlist && !Array.isArray(actualWatchlist)) {
+                actualWatchlist = [actualWatchlist]
+            }
+            console.log(actualWatchlist)
+            return actualWatchlist
         } catch (error) {
             console.log(error)
         }
