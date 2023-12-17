@@ -58,7 +58,7 @@ export class MarketDataRequests {
         });
 
         if (data.data.options) return data.data.options.option;
-        else return data.data;
+        else return null;
     }
 
     /**
